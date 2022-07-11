@@ -28,7 +28,8 @@ export default {
   components: {  },
   data() {
     return {
-      connection: process.env.NODE_ENV === 'development' ? 'http://localhost:8000/api' : 'prod_url',
+      // connection: process.env.NODE_ENV === 'development' ? 'http://localhost:8000/api' : 'prod_url',
+      connection: process.env.NODE_ENV === 'development' ? 'http://localhost:8000/api' : 'http://localhost:8000/api',
       flow: null,
       flowState: null,
       currentFlowStep: null,
@@ -65,7 +66,7 @@ export default {
     },
     getComponentToRender(componentPath) {
       if (componentPath) {
-        return shallowRef(defineAsyncComponent(() => import(`./components/${componentPath}.vue`)))
+        return shallowRef(defineAsyncComponent(() => import(`@/components/${componentPath}.vue`)))
       }
     },
     setCurrentFlowStep(res) {
