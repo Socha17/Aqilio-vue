@@ -66,7 +66,8 @@ export default {
     },
     getComponentToRender(componentPath) {
       if (componentPath) {
-        return shallowRef(defineAsyncComponent(() => import(`@/components/${componentPath}.vue`)))
+        // return shallowRef(defineAsyncComponent(() => import(`@/components/${componentPath}.vue`)))
+        return shallowRef(defineAsyncComponent(() => import(/* @vite-ignore */new URL(`${componentPath}.vue`, import.meta.url).origin + `/${componentPath}`)))
       }
     },
     setCurrentFlowStep(res) {
