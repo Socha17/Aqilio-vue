@@ -7,7 +7,7 @@
 
 <script>
 import axios from 'axios';
-import { defineAsyncComponent, shallowRef } from 'vue'
+import { defineAsyncComponent, resolveDynamicComponent } from 'vue'
 import eventBus from '../aqilio/bus.js'
 
 export default {
@@ -22,6 +22,10 @@ export default {
     },
     progress: {
       type: Object,
+      required: false
+    },
+    customComponents: {
+      type: Array,
       required: false
     },
   },
@@ -64,10 +68,29 @@ export default {
     previousStep() {
       this.getPreviousFlowStep()
     },
-    getComponentToRender(componentPath) {
-      if (componentPath) {
-        // return shallowRef(defineAsyncComponent(() => import(`@/components/${componentPath}.vue`)))
-        return shallowRef(defineAsyncComponent(() => import(/* @vite-ignore */new URL(`${componentPath}.vue`, import.meta.url).origin + `/${componentPath}`)))
+    getComponentToRender(componentName) {
+
+      if (componentName) {
+        let foundCustomComponent = this.customComponents.find(customComponent => {
+          if (!customComponent._value.name && process.env.NODE_ENV === 'development') {
+              console.warn(`Aqilio [warn]: one of the customComponents don't have a name value. Make sure to assign your components a name value like this: "name: 'componentNameHere'" https://vuejs.org/api/options-misc.html#name`);
+          }
+
+          if (customComponent._value.name === componentName) {
+            return customComponent
+          }
+        });
+        console.log("foundCustomComponent");
+        console.log(foundCustomComponent);
+        console.log(this.customComponents);
+        // return shallowRef(defineAsyncComponent(() => import(`@/components/${componentName}.vue`)))
+        // return shallowRef(defineAsyncComponent(() => import('./' + new URL(`${componentName}.vue`, import.meta.url).origin + `/${componentName}`)))
+        // return shallowRef(defineAsyncComponent(() => import(`../${componentName}.vue`)))
+        if (!foundCustomComponent && process.env.NODE_ENV === 'development') {
+          console.warn(`Aqilio [warn]: component not found in customComponents props. Trying to render ${componentName} from globally registered components`);
+        }
+
+        return foundCustomComponent ? foundCustomComponent : componentName
       }
     },
     setCurrentFlowStep(res) {

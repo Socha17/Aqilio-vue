@@ -9,6 +9,7 @@
 <script>
 
 export default {
+  name: 'userTextInput',
   props: ['aqilioData'],
   components: {
 
