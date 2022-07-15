@@ -7,7 +7,6 @@
 
 <script>
 import axios from 'axios';
-import { defineAsyncComponent, resolveDynamicComponent } from 'vue'
 import eventBus from '../aqilio/bus.js'
 
 export default {
@@ -72,7 +71,7 @@ export default {
 
       if (componentName) {
         let foundCustomComponent = this.customComponents.find(customComponent => {
-          if (!customComponent._value.name && process.env.NODE_ENV === 'development') {
+          if (!customComponent._value.name) {
               console.warn(`Aqilio [warn]: one of the customComponents don't have a name value. Make sure to assign your components a name value like this: "name: 'componentNameHere'" https://vuejs.org/api/options-misc.html#name`);
           }
 
@@ -80,13 +79,11 @@ export default {
             return customComponent
           }
         });
+        
         console.log("foundCustomComponent");
         console.log(foundCustomComponent);
         console.log(this.customComponents);
-        // return shallowRef(defineAsyncComponent(() => import(`@/components/${componentName}.vue`)))
-        // return shallowRef(defineAsyncComponent(() => import('./' + new URL(`${componentName}.vue`, import.meta.url).origin + `/${componentName}`)))
-        // return shallowRef(defineAsyncComponent(() => import(`../${componentName}.vue`)))
-        if (!foundCustomComponent && process.env.NODE_ENV === 'development') {
+        if (!foundCustomComponent) {
           console.warn(`Aqilio [warn]: component not found in customComponents props. Trying to render ${componentName} from globally registered components`);
         }
 
