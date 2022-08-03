@@ -11,7 +11,7 @@ import eventBus from '../aqilio/bus.js'
 
 export default {
   props: {
-    APIKey: {
+    apiKey: {
       type: String,
       required: true
     },
@@ -31,8 +31,7 @@ export default {
   components: {  },
   data() {
     return {
-      // connection: process.env.NODE_ENV === 'development' ? 'http://localhost:8000/api' : 'prod_url',
-      connection: process.env.NODE_ENV === 'development' ? 'http://localhost:8000/api' : 'http://localhost:8000/api',
+      connection: process.env.NODE_ENV === 'development' ? 'http://localhost:8000/api' : 'https://aqilio.com/api',
       flow: null,
       flowState: null,
       currentFlowStep: null,
@@ -79,7 +78,7 @@ export default {
             return customComponent
           }
         });
-        
+
         console.log("foundCustomComponent");
         console.log(foundCustomComponent);
         console.log(this.customComponents);
