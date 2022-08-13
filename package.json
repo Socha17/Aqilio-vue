@@ -1,7 +1,7 @@
 {
   "name": "aqilio-vue",
   "private": false,
-  "version": "0.0.9",
+  "version": "0.0.11",
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
