@@ -103,7 +103,7 @@ export default {
     },
     getPreviousFlowStep() {
       axios.post(`${this.connection}/getPreviousFlowStep`, {
-        APIKey: this.APIKey,
+        apiKey: this.apiKey,
         flowId: this.flowId,
         instance: this.$aqilio.getAqilioInstance(),
       })
@@ -118,7 +118,7 @@ export default {
     },
     getNextFlowStep() {
       axios.post(`${this.connection}/getNextFlowStep`, {
-        APIKey: this.APIKey,
+        apiKey: this.apiKey,
         flowId: this.flowId,
         instance: this.$aqilio.getAqilioInstance(),
       })
@@ -133,7 +133,7 @@ export default {
     },
     getAqilioFlow() {
       axios.post(`${this.connection}/getAqilioFlow`, {
-        APIKey: this.APIKey,
+        apiKey: this.apiKey,
         flowId: this.flowId,
         progress: this.$aqilio.getProgress(true),
       })
