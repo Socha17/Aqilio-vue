@@ -39,13 +39,8 @@ export default {
     }
   },
   mounted() {
-    console.log("mounted");
     if (this.$aqilio.instanciateInstance(this.flowId)) {
-      console.log(this.$aqilio.getInstances(this.flowId));
-      console.log(this.progress);
-      console.log("check progress");
       if (this.progress) {
-        console.log("call setProgress");
         this.$aqilio.setProgress(this.progress)
       }
       this.getAqilioFlow()
@@ -54,20 +49,17 @@ export default {
     }
   },
   beforeUnmount() {
-    console.log("beforeUnmount");
     this.$aqilio.removeInstance(this.flowId)
 
   },
   methods: {
     nextStep() {
-      console.log("nextElement");
       this.getNextFlowStep()
     },
     previousStep() {
       this.getPreviousFlowStep()
     },
     getComponentToRender(componentName) {
-
       if (componentName) {
         let foundCustomComponent = this.customComponents.find(customComponent => {
           if (!customComponent._value.name) {
@@ -79,9 +71,6 @@ export default {
           }
         });
 
-        console.log("foundCustomComponent");
-        console.log(foundCustomComponent);
-        console.log(this.customComponents);
         if (!foundCustomComponent) {
           console.warn(`Aqilio [warn]: component not found in customComponents props. Trying to render ${componentName} from globally registered components`);
         }
@@ -108,11 +97,6 @@ export default {
         instance: this.$aqilio.getAqilioInstance(),
       })
       .then((res) => {
-        console.log(res);
-        if (res.data.flowComplete) {
-          console.log("flow complete");
-          return
-        }
         this.setCurrentFlowStep(res)
       })
     },
@@ -123,11 +107,6 @@ export default {
         instance: this.$aqilio.getAqilioInstance(),
       })
       .then((res) => {
-        console.log(res);
-        if (res.data.flowComplete) {
-          console.log("flow complete");
-          return
-        }
         this.setCurrentFlowStep(res)
       })
     },
@@ -138,7 +117,6 @@ export default {
         progress: this.$aqilio.getProgress(true),
       })
       .then((res) => {
-        console.log(res);
         this.setCurrentFlowStep(res)
       })
 

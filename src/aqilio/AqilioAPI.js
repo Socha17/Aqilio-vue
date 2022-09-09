@@ -60,8 +60,6 @@ export default () => {
     setCurrentStepValue(value, metaData, flowId = null) {
       let aqilioInstance = this.getAqilioInstance(flowId)
       aqilioInstance.progress[aqilioInstance.currentStepKey] = {"key": aqilioInstance.currentStepKey, "value": value, "metaData": metaData, "stepOrder": aqilioInstance.stepOrder}
-      console.log("aqilioInstance.progress");
-      console.log(aqilioInstance.progress);
     },
 
   }
