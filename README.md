@@ -1,7 +1,11 @@
 # Aqilio Vue Plugin
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
 
-## Installation
+## Quickstart
 
-- npm i aqilio-vue
+Check out our documentation on how to get started with Aqilio
+https://aqilio.com/docs/1.0/quickstart
+
+
+We also have a quick start video (7 mins) that you can watch here
+https://www.youtube.com/watch?v=NrawMu7eis0
