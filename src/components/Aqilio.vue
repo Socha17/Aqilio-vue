@@ -50,45 +50,62 @@ export default {
   },
   beforeUnmount() {
     this.$aqilio.removeInstance(this.flowId)
-
   },
   methods: {
     nextStep() {
-      this.getNextFlowStep()
+      if (this.$aqilio.isCurrentStepLastStep()) {
+        this.$emit('lastStepComplete')
+      } else {
+        this.getNextFlowStep()
+      }
     },
     previousStep() {
       this.getPreviousFlowStep()
     },
-    getComponentToRender(componentName) {
-      if (componentName) {
-        let foundCustomComponent = this.customComponents.find(customComponent => {
-          if (!customComponent._value.name) {
-              console.warn(`Aqilio [warn]: one of the customComponents don't have a name value. Make sure to assign your components a name value like this: "name: 'componentNameHere'" https://vuejs.org/api/options-misc.html#name`);
-          }
+    getComponentToRender(step) {
+      let componentName = step.component_path
 
-          if (customComponent._value.name === componentName) {
-            return customComponent
-          }
-        });
+      // for default components just use aqilio-vue-components
+      if (step.component_type.slug !== 'custom-component') {
+        return componentName
+      }
 
-        if (!foundCustomComponent) {
-          console.warn(`Aqilio [warn]: component not found in customComponents props. Trying to render ${componentName} from globally registered components`);
+      let foundCustomComponent = this.customComponents.find(customComponent => {
+        if (!customComponent._value.name) {
+            console.warn(`Aqilio [warn]: one of the customComponents don't have a name value. Make sure to assign your components a name value like this: "name: 'componentNameHere'" https://vuejs.org/api/options-misc.html#name`);
         }
 
-        return foundCustomComponent ? foundCustomComponent : componentName
+        if (customComponent._value.name === componentName) {
+          return customComponent
+        }
+      });
+
+      if (!foundCustomComponent) {
+        console.warn(`Aqilio [warn]: component not found in customComponents props. Trying to render ${componentName} from globally registered components`);
       }
+
+      return foundCustomComponent ? foundCustomComponent : componentName
     },
     setCurrentFlowStep(res) {
+      let component_data = this.formComponentData(res)
+
       this.currentFlowStep = {
-        component: this.getComponentToRender(res.data.step.component_path),
+        component: this.getComponentToRender(res.data.step),
         stepKey: res.data.step.step_key,
         extraProps: res.data.step.extra_props,
+        component_data: component_data,
       }
       this.$aqilio.setCurrentStepKey(this.currentFlowStep.stepKey, res.data.isLastStep, res.data.step.order)
       // if theres progress set that, if not set default aqilioPropsData
       let aqilioPropsData = this.$aqilio.getProgress(true)[this.currentFlowStep.stepKey] ? this.$aqilio.getProgress(true)[this.currentFlowStep.stepKey] : {'key': this.currentFlowStep.stepKey, 'value': null}
       aqilioPropsData.additionalProps = JSON.parse(res.data.step.extra_props)
+      aqilioPropsData.component_data = component_data
       this.aqilioPropsData = aqilioPropsData
+    },
+    formComponentData(res) {
+      let component_data = res.data.step.component_data_merge
+      component_data.show_back_button = res.data.step.show_back_button
+      return component_data
     },
     getPreviousFlowStep() {
       axios.post(`${this.connection}/getPreviousFlowStep`, {

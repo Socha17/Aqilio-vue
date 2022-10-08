@@ -1,7 +1,7 @@
 {
   "name": "aqilio-vue",
   "private": false,
-  "version": "0.0.13",
+  "version": "0.0.14",
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
@@ -23,6 +23,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "aqilio-vue-components": "^0.0.8",
     "axios": "^0.27.2",
     "mitt": "^3.0.0",
     "vue": "^3.2.25"
