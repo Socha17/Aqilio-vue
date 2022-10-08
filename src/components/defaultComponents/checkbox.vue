@@ -10,6 +10,7 @@
 
 export default {
   name: 'checkbox',
+  props: ['aqilioData'],
   components: {
 
   },
