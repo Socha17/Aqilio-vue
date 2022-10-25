@@ -87,20 +87,25 @@ export default {
       return foundCustomComponent ? foundCustomComponent : componentName
     },
     setCurrentFlowStep(res) {
-      let component_data = this.formComponentData(res)
-
-      this.currentFlowStep = {
-        component: this.getComponentToRender(res.data.step),
-        stepKey: res.data.step.step_key,
-        extraProps: res.data.step.extra_props,
-        component_data: component_data,
-      }
-      this.$aqilio.setCurrentStepKey(this.currentFlowStep.stepKey, res.data.isLastStep, res.data.step.order)
-      // if theres progress set that, if not set default aqilioPropsData
-      let aqilioPropsData = this.$aqilio.getProgress(true)[this.currentFlowStep.stepKey] ? this.$aqilio.getProgress(true)[this.currentFlowStep.stepKey] : {'key': this.currentFlowStep.stepKey, 'value': null}
-      aqilioPropsData.additionalProps = JSON.parse(res.data.step.extra_props)
-      aqilioPropsData.component_data = component_data
-      this.aqilioPropsData = aqilioPropsData
+      this.currentFlowStep = null
+      // setTimeout is needed because if we are rendering the same component twice the value is being passed from the first to the second component
+      // for example components steps are shortAnswer into another shortAnswer. The user enters a value of 'abc' for the first shortAnswer, the second shortAnswer will mount with the same value
+      setTimeout(() => {
+        let component_data = this.formComponentData(res)
+  
+        this.currentFlowStep = {
+          component: this.getComponentToRender(res.data.step),
+          stepKey: res.data.step.step_key,
+          extraProps: res.data.step.extra_props,
+          component_data: component_data,
+        }
+        this.$aqilio.setCurrentStepKey(this.currentFlowStep.stepKey, res.data.isLastStep, res.data.step.order)
+        // if theres progress set that, if not set default aqilioPropsData
+        let aqilioPropsData = this.$aqilio.getProgress(true)[this.currentFlowStep.stepKey] ? this.$aqilio.getProgress(true)[this.currentFlowStep.stepKey] : {'key': this.currentFlowStep.stepKey, 'value': null}
+        aqilioPropsData.additionalProps = JSON.parse(res.data.step.extra_props)
+        aqilioPropsData.component_data = component_data
+        this.aqilioPropsData = aqilioPropsData
+      }, 0);
     },
     formComponentData(res) {
       let component_data = res.data.step.component_data_merge
